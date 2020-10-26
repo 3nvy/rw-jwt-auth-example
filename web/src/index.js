@@ -11,6 +11,7 @@ import './index.css'
 
 ReactDOM.render(
   <FatalErrorBoundary page={FatalErrorPage}>
+    {/* Use local JWT Auth Client and set AUthProvider type to custom */}
     <AuthProvider client={JWTAuth} type="custom">
       <RedwoodProvider>
         <Routes />

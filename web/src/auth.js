@@ -1,3 +1,9 @@
+/**
+ * ### CUSTOM LOCAL JWT AUTH CLIENT ###
+ *
+ * Simple JWT client that looks for an accessToken coockie for authentication
+ */
+
 import Cookies from 'js-cookie'
 import jwt from 'jsonwebtoken'
 

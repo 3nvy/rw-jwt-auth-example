@@ -1,15 +1,13 @@
 import { db } from 'src/lib/db'
 import bcrypt from 'bcryptjs'
 
-import { requireAuth } from 'src/lib/auth'
 import {
   generateJWTTokens,
   invalidateJWTTokens,
   verifyToken,
 } from 'src/functions/jwt-identify'
 
-export const users = async () => {
-  await requireAuth()
+export const users = () => {
   return db.user.findMany()
 }
 
@@ -40,6 +38,12 @@ export const deleteUser = ({ id }) => {
   })
 }
 
+/**
+ * Logins User
+ *
+ * Uses bcrypt to compare passwords and generates JWT tokens if login data is valid
+ * @param {*} param0
+ */
 export const loginUser = async ({ email, password }) => {
   const user = await db.user.findOne({
     where: { email },
@@ -57,14 +61,23 @@ export const loginUser = async ({ email, password }) => {
   return false
 }
 
+/**
+ * Logout User
+ *
+ * Logs out user by invalidating JWT tokens and remove refreshToken from db
+ * @param {*} param0
+ */
 export const logoutUser = async ({ accessToken }) => {
-  debugger
   const { valid, data: user } = verifyToken(accessToken)
+
+  // If the token is valid, it means theres a valid user data and we can proceed to update the db entry
   if (valid) {
     await db.user.update({
       data: { refreshToken: '' },
       where: { id: user.id },
     })
   }
+
+  // Invalidates tokens
   invalidateJWTTokens()
 }
