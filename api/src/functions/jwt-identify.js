@@ -28,7 +28,7 @@ const parseCookiesHeader = (cookies) =>
 export const verifyToken = (token) => {
   try {
     // Returns if the token is both valid and not expired
-    const data = jwt.verify(token, 'SUPER_SECRET')
+    const data = jwt.verify(token, process.env.TOKEN_SIGN_KEY)
     return { valid: true, expired: false, data }
   } catch (err) {
     // Returns if the token is valid but expired
@@ -36,7 +36,7 @@ export const verifyToken = (token) => {
       return {
         valid: true,
         expired: true,
-        data: jwt.decode(token, 'SUPER_SECRET'),
+        data: jwt.decode(token, process.env.TOKEN_SIGN_KEY),
       }
 
     // Returns if the token is not valid
@@ -60,14 +60,22 @@ export const invalidateJWTTokens = () => {
  */
 export const generateJWTTokens = ({ id, email, username }) => {
   // Generate Refresh Token
-  const refreshToken = jwt.sign({ id, email, username }, 'SUPER_SECRET', {
-    expiresIn: '1d',
-  })
+  const refreshToken = jwt.sign(
+    { id, email, username },
+    process.env.TOKEN_SIGN_KEY,
+    {
+      expiresIn: process.env.REFRESH_TOKEN_TIME,
+    }
+  )
 
   // Generate Access Token
-  const accessToken = jwt.sign({ id, email, username }, 'SUPER_SECRET', {
-    expiresIn: '15m',
-  })
+  const accessToken = jwt.sign(
+    { id, email, username },
+    process.env.TOKEN_SIGN_KEY,
+    {
+      expiresIn: process.env.ACCESS_TOKEN_TIME,
+    }
+  )
 
   context.responseHeaders.set('set-cookie', [
     `refreshToken=${refreshToken}; Path=/; HttpOnly;`, //Refresh token is set as HttpOnly so it cant be hijacked with scripting
