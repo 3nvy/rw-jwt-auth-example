@@ -15,7 +15,7 @@ yarn install
 ```
 
 
-Initiate the database with the pre-defined models in order to use the local auth service
+Initiate the database with the pre-defined models in order to use the local auth service (If you come from a previous version, please remove your current db file as migrations and db schema have changed dramatically)
 ```terminal
 yarn rw db up
 ```
