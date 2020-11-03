@@ -1,19 +1,19 @@
-import ReactDOM from 'react-dom'
 import { AuthProvider } from '@redwoodjs/auth'
+import ReactDOM from 'react-dom'
 import { RedwoodProvider, FatalErrorBoundary } from '@redwoodjs/web'
 
+import { AuthMiddleware, JWTAuthClient } from 'src/jwtAuthClient'
 import FatalErrorPage from 'src/pages/FatalErrorPage'
-import Routes from 'src/Routes'
-import JWTAuth from 'src/auth'
 
-import './scaffold.css'
+import Routes from 'src/Routes'
+
 import './index.css'
+import './scaffold.css'
 
 ReactDOM.render(
   <FatalErrorBoundary page={FatalErrorPage}>
-    {/* Use local JWT Auth Client and set AUthProvider type to custom */}
-    <AuthProvider client={JWTAuth} type="custom">
-      <RedwoodProvider>
+    <AuthProvider client={JWTAuthClient} type="custom">
+      <RedwoodProvider graphQLClientConfig={AuthMiddleware()}>
         <Routes />
       </RedwoodProvider>
     </AuthProvider>

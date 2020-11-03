@@ -1,0 +1,40 @@
+datasource DS {
+  // optionally set multiple providers
+  // example: provider = ["sqlite", "postgresql"]
+  provider = "sqlite"
+  url = "***"
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+// Contains the User credentials and refresh token
+model User {
+  id           String      @id @default(cuid())
+  password     String
+  email        String      @unique
+  refreshToken String?
+  userRoles    UserRole[]
+  profile      Profile
+}
+
+model UserRole {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  name      String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+
+  @@unique([name, userId])
+}
+
+// Contains other User information that is not relevant for authentication
+model Profile {
+  id       String     @id @default(cuid())
+  username String     @unique
+  user     User?      @relation(fields:  [userId], references: [id])
+  userId   String?
+}

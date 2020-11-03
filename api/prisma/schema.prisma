@@ -10,21 +10,31 @@ generator client {
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
-// Define your own datamodels here and run `yarn redwood db save` to create
-// migrations for them.
-// TODO: Please remove the following example:
+// Contains the User credentials and refresh token
 model User {
-  id            Int     @id @default(autoincrement())
-  email         String  @unique
-  username      String  @unique
-  password      String
-  refreshToken  String?
-  createdAt     DateTime @default(now())
+  id           String      @id @default(cuid())
+  password     String
+  email        String      @unique
+  refreshToken String?
+  userRoles    UserRole[]
+  profile      Profile
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  body      String
+model UserRole {
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  name      String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+
+  @@unique([name, userId])
+}
+
+// Contains other User information that is not relevant for authentication
+model Profile {
+  id       String     @id @default(cuid())
+  username String     @unique
+  user     User?      @relation(fields:  [userId], references: [id])
+  userId   String?
 }

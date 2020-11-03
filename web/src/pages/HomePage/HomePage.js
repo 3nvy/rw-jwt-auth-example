@@ -1,14 +1,21 @@
 import { useAuth } from '@redwoodjs/auth'
 
-import UsersLayout from 'src/layouts/UsersLayout'
-import PostsCell from 'src/components/Admin/PostsCell'
+import MainLayout from 'src/layouts/MainLayout'
+import UsersCell from 'src/components/UsersCell'
 
 const HomePage = () => {
   const { isAuthenticated } = useAuth()
   return (
-    <UsersLayout>
-      {isAuthenticated ? <PostsCell /> : <p>User Is Loggedout</p>}
-    </UsersLayout>
+    <MainLayout>
+      {isAuthenticated ? (
+        <>
+          <p>User Is Loggedin</p>
+          <UsersCell />
+        </>
+      ) : (
+        <p>User Is Loggedout</p>
+      )}
+    </MainLayout>
   )
 }
 

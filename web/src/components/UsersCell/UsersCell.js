@@ -1,35 +1,17 @@
-import { Link, routes } from '@redwoodjs/router'
-
-import Users from 'src/components/Users'
-
 export const QUERY = gql`
-  query USERS {
+  query UsersQuery {
     users {
       id
-      email
-      username
-      password
-      refreshToken
-      createdAt
     }
   }
 `
 
-export const Failure = () => <Users users={[]} />
-
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => {
-  return (
-    <div className="rw-text-center">
-      {'No users yet. '}
-      <Link to={routes.newUser()} className="rw-link">
-        {'Create one?'}
-      </Link>
-    </div>
-  )
-}
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => <div>Error: {error.message}</div>
 
 export const Success = ({ users }) => {
-  return <Users users={users} />
+  return JSON.stringify(users)
 }

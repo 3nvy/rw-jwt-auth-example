@@ -1,26 +1,36 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
 import jwt from 'jsonwebtoken'
 
-import { verifyJWTAuth } from 'src/functions/jwt-identify'
+const verifyToken = (token) => {
+  try {
+    // Returns if the token is both valid and not expired
+    const data = jwt.verify(token, process.env.TOKEN_SIGN_KEY)
+    return { valid: true, expired: false, data }
+  } catch (err) {
+    // Returns if the token is valid but expired
+    if (err && err.name === 'TokenExpiredError')
+      return {
+        valid: true,
+        expired: true,
+        data: jwt.decode(token, process.env.TOKEN_SIGN_KEY),
+      }
 
-/**
- * Decodes accessToken and returns relevante user data
- * @param {*} token
- */
-export const getCurrentUser = (token) => ({ ...jwt.decode(token), token })
+    // Returns if the token is not valid
+    return { valid: false, expired: false, data: {} }
+  }
+}
 
-/**
- * Validates for auth permissions
- * @param {*} param0
- */
-export const requireAuth = async ({ role } = {}) => {
-  if (!context.currentUser) {
+export const getCurrentUser = async (token) => {
+  const { valid, expired, data } = verifyToken(token)
+  if (!valid) throw Error('Invalid Token Provided')
+
+  return data ? { ...data, expired, roles: data.roles || [] } : false
+}
+
+export const requireAuth = ({ role } = {}) => {
+  if (!context.currentUser || context.currentUser.expired) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
-
-  // Use custom JWT Auth to validate auth action by validating the header tokens
-  // As we have async actions within this validation, we need to set this function as async and await for resolution
-  await verifyJWTAuth()
 
   if (
     typeof role !== 'undefined' &&
@@ -29,6 +39,7 @@ export const requireAuth = async ({ role } = {}) => {
   ) {
     throw new ForbiddenError("You don't have access to do that.")
   }
+
   if (
     typeof role !== 'undefined' &&
     Array.isArray(role) &&
