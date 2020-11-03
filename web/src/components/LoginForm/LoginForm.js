@@ -47,6 +47,7 @@ const LoginForm = (props) => {
         </Label>
         <TextField
           name="password"
+          type="password"
           defaultValue={props.user?.password}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
