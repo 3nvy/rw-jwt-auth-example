@@ -2,6 +2,11 @@ import { HttpLink, ApolloLink, concat } from '@apollo/client'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
 
+const localStorageManager = (key, value) => {
+  if (value) localStorage.setItem(key, JSON.stringify(value))
+  return JSON.parse(localStorage.getItem(key))
+}
+
 /**
  * ApolloClient middleware to check for token expiracy and refreshing
  */
@@ -12,7 +17,7 @@ const AuthMiddleware = () => {
 
   const authMiddleware = new ApolloLink(async (operation, forward) => {
     try {
-      const token = JSON.parse(localStorage.getItem('rw_jwt_user')).accessToken
+      const token = localStorageManager('rw_jwt_user').accessToken
       const { exp } = jwt.decode(token)
 
       // Checks if access token has expired and refreshs tokens before proceeding
@@ -20,19 +25,21 @@ const AuthMiddleware = () => {
         const data = await axios.get(
           `${window.__REDWOOD__API_PROXY_PATH}/jwtRefresh`
         )
-        localStorage.setItem('rw_jwt_user', JSON.stringify(data?.data?.data))
+        localStorageManager('rw_jwt_user', data?.data?.data || {})
       }
-    } catch (err) {}
 
-    // Set headers for next operation
-    operation.setContext({
-      headers: {
-        'auth-provider': 'custom',
-        authorization: `Bearer ${
-          JSON.parse(localStorage.getItem('rw_jwt_user')).accessToken
-        }`,
-      },
-    })
+      const accessToken = localStorageManager('rw_jwt_user')?.accessToken
+      // Set headers for next operation
+      accessToken &&
+        operation.setContext({
+          headers: {
+            'auth-provider': 'custom',
+            authorization: `Bearer ${accessToken}`,
+          },
+        })
+    } catch (err) {
+      localStorage.removeItem('rw_jwt_user')
+    }
 
     return forward(operation)
   })
@@ -48,11 +55,9 @@ const JWTAuthClient = {
   login: ({ password, email }) =>
     new Promise((resolve, reject) => {
       axios
-        .get(`${window.__REDWOOD__API_PROXY_PATH}/jwtLogin`, {
-          params: {
-            password,
-            email,
-          },
+        .post(`${window.__REDWOOD__API_PROXY_PATH}/jwtLogin`, {
+          password,
+          email,
         })
         .then(({ data: { data } }) => {
           localStorage.setItem('rw_jwt_user', JSON.stringify(data))

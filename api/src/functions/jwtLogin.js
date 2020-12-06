@@ -5,7 +5,7 @@ import { db } from 'src/lib/db'
 
 export const handler = async (event, context) => {
   // Get user data from request body
-  const { email, password } = event.queryStringParameters
+  const { email, password } = JSON.parse(event.body)
 
   // Looks for existing user based on email
   const user = await db.user.findOne({
@@ -67,7 +67,11 @@ export const handler = async (event, context) => {
     statusCode: 200,
     // Set auth cookies on response headers
     headers: {
-      'set-cookie': [`refreshToken=${refreshToken}; Path=/; HttpOnly`],
+      'set-cookie': [
+        `refreshToken=${refreshToken}; Path=/; HttpOnly; ${
+          process.env.USE_SECURE_COOKIES === 'true' && 'secure'
+        }`,
+      ],
     },
     body: JSON.stringify({
       data: {

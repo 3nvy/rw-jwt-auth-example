@@ -2004,12 +2004,12 @@
   resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.9.0.tgz#c6f6652890783b899f266537e90e69c3481f5474"
   integrity sha512-wPk4ehyTtVM7ZarWs16MhOc6kwLV/gZFardMvUeh46rlBwrklMdKtNChzzPa3wurrUPQ5KTbuRBz5Mgf7AdD/w==
 
-"@prisma/client@2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.9.0.tgz#acfaca0c5695d7f439e5af54b7cd0f7fb5926340"
-  integrity sha512-VLXw6s13xakIrV9Z8Ftw0j+mbXuvbRkxYv3X5hRZdPN1NAwgeXJmrrTK9MS2HDvW8eGZL7P8OaUSNQ3Sfgvr/Q==
+"@prisma/client@2.11.0":
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.11.0.tgz#574c1aa3b571ea01c0fa8dca348c6ba5db41dcc9"
+  integrity sha512-BF7K/yi5fAnrt7MelQqUueJyl06IGmIxf+7f5RxFSvyO6xZMbOYxhW21kV2wt10mOIS0khQbo0xY6w/8jViJuQ==
   dependencies:
-    pkg-up "^3.1.0"
+    "@prisma/engines-version" "2.11.0-10.58369335532e47bdcec77a2f1e7c1fb83a463918"
 
 "@prisma/debug@2.9.0":
   version "2.9.0"
@@ -2035,6 +2035,11 @@
     p-retry "^4.2.0"
     terminal-link "^2.1.1"
     undici "2.0.7"
+
+"@prisma/engines-version@2.11.0-10.58369335532e47bdcec77a2f1e7c1fb83a463918":
+  version "2.11.0-10.58369335532e47bdcec77a2f1e7c1fb83a463918"
+  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-2.11.0-10.58369335532e47bdcec77a2f1e7c1fb83a463918.tgz#840bb5ca8707ed3b852d250c1bac9c75098682ee"
+  integrity sha512-qlkW4dKoW1dUnperWPuhFriZ/NTHlsKLhBbebxRa8qMuD3o37SvWIDGLjFOQx1N0Eb4H04rI3XxgjkWLFVlZCw==
 
 "@prisma/fetch-engine@2.9.0":
   version "2.9.0"
@@ -2179,17 +2184,17 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
 
-"@redwoodjs/api@^0.20.0":
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/@redwoodjs/api/-/api-0.20.0.tgz#1737a21c2cd3219760d29d3516bb479fd610d0c4"
-  integrity sha512-wRMPWV8OiB0P8lqoum4zTsh7+KCUHVB6Vyxoij0Wgovu26mUP97TpvIf6+WlOkYi0oZbHTfVlaORBxN/Ohg2dg==
+"@redwoodjs/api@^0.21.0":
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/@redwoodjs/api/-/api-0.21.0.tgz#1413cc9bdea6826a8a6ae299dc7b8b79008c6d88"
+  integrity sha512-jTtyXpU4/mCHsOESSyqUjNnZXsVPsCCzkTZ1e9vfCSZVTYgtw7Og663f3reQ9scjdUtVZMLsiWz7OmprLMafuQ==
   dependencies:
-    "@prisma/client" "2.9.0"
-    "@redwoodjs/internal" "^0.20.0"
+    "@prisma/client" "2.11.0"
+    "@redwoodjs/internal" "^0.21.0"
     apollo-server-lambda "2.18.2"
     core-js "3.6.5"
     graphql "^15.3.0"
-    graphql-scalars "^1.2.7"
+    graphql-scalars "^1.4.1"
     graphql-tools "6.2.4"
     jsonwebtoken "^8.5.1"
     jwks-rsa "^1.8.1"
@@ -2346,6 +2351,16 @@
   version "0.20.0"
   resolved "https://registry.yarnpkg.com/@redwoodjs/internal/-/internal-0.20.0.tgz#237123301cb83d41d964ab875f89f6766e195127"
   integrity sha512-bix0BLKE/JtWyY+aUd9MPm+YNWLVCrzjqzd9wfnL9gW9+GPpbGXcvYHuATKgiJnSnN2GRhpwq2WqquXwfJoN/A==
+  dependencies:
+    deepmerge "^4.2.2"
+    findup-sync "^4.0.0"
+    kill-port "^1.6.1"
+    toml "^3.0.0"
+
+"@redwoodjs/internal@^0.21.0":
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/@redwoodjs/internal/-/internal-0.21.0.tgz#72c00d6ce364a84de08cb20265416faba0b7f118"
+  integrity sha512-o81KA3wpEykwmfVURLkCqrCvU8agTFx9raNaT5850X+TTrRuo/Fwl0nl4k7sFEQYAOa1WH7QlGmB47SSGfcr2A==
   dependencies:
     deepmerge "^4.2.2"
     findup-sync "^4.0.0"
@@ -8316,10 +8331,12 @@ graphql-extensions@^0.12.5:
     apollo-server-env "^2.4.5"
     apollo-server-types "^0.6.0"
 
-graphql-scalars@^1.2.7:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/graphql-scalars/-/graphql-scalars-1.2.7.tgz#dad338ffa5f415615770b01281c83d710d9b314d"
-  integrity sha512-bkB/OEsfiYm/hMwSnZfg91SZ3ChOM6Dnw5LZkUN68IXtBGKrBxjw8kXbD3bBXhWpjaKshvNVG7ZK3vFtfBmwrQ==
+graphql-scalars@^1.4.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/graphql-scalars/-/graphql-scalars-1.6.1.tgz#15564239a6142b9e9e6b6ce01a1b50ba42ebfd0f"
+  integrity sha512-PfgFeAioO48vziGD2SM7KgY0cmUyM9yh1BF2L12muFXIvHbIxYc5JYFSfjqtNIRRuHt00KD29pdFdV+1lLMvuw==
+  dependencies:
+    tslib "~2.0.3"
 
 graphql-tag@^2.10.3, graphql-tag@^2.11.0, graphql-tag@^2.9.2:
   version "2.11.0"
@@ -14490,6 +14507,11 @@ tslib@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.1.tgz#410eb0d113e5b6356490eec749603725b021b43e"
   integrity sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ==
+
+tslib@~2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
+  integrity sha512-uZtkfKblCEQtZKBF6EBXVZeQNl82yqtDQdv+eck8u7tdPxjLu2/lp5/uPW+um2tpuxINHWy3GhiccY7QgEaVHQ==
 
 tsutils@^3.17.1:
   version "3.17.1"
