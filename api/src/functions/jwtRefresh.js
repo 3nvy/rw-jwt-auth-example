@@ -73,7 +73,11 @@ export const handler = async (event, context) => {
   return {
     statusCode: 200,
     headers: {
-      'set-cookie': [`refreshToken=${newRefreshToken}; Path=/; HttpOnly`],
+      'set-cookie': [
+        `refreshToken=${newRefreshToken}; Path=/; HttpOnly; ${
+          process.env.USE_SECURE_COOKIES === 'true' && 'secure'
+        }`,
+      ],
     },
     body: JSON.stringify({
       data: {
